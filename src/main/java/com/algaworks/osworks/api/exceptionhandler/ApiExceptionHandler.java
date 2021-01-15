@@ -21,35 +21,35 @@ import com.algaworks.osworks.domain.exception.NegocioException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
-	
+
 	@Autowired
 	private MessageSource messageSource;
-	
+
 	@ExceptionHandler(NegocioException.class)
-	public ResponseEntity <Object> handNegocio(NegocioException ex, WebRequest request){
+	public ResponseEntity<Object> handNegocio(NegocioException ex, WebRequest request) {
 		var status = HttpStatus.BAD_REQUEST;
 		var problema = new Problema();
-		
+
 		problema.setStatus(status.value());
 		problema.setTitulo(ex.getMessage());
 		problema.setDataHota(LocalDateTime.now());
-		
+
 		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
 	}
-	
+
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		
+
 		var campos = new ArrayList<Problema.Campos>();
-		
+
 		for (ObjectError error : ex.getBindingResult().getAllErrors()) {
 			String nome = ((FieldError) error).getField();
 			String mensagem = messageSource.getMessage(error, LocaleContextHolder.getLocale());
-			
+
 			campos.add(new Problema.Campos(nome, mensagem));
 		}
-		
+
 		var problema = new Problema();
 		problema.setStatus(status.value());
 		problema.setTitulo("Um ou mais campos estão inválidos." + "Faça o preenchimento correto e tente novamente.");
@@ -57,6 +57,5 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		problema.setCampos(campos);
 		return super.handleExceptionInternal(ex, problema, headers, status, request);
 	}
-	
 
 }

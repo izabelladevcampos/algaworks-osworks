@@ -28,10 +28,9 @@ public class ClienteController {
 
 	@Autowired
 	private ClienteRepository clienteRepository;
-	
+
 	@Autowired
 	private CadastroClienteService clienteService;
-	
 
 	@GetMapping
 	public List<Cliente> listar() {
@@ -61,13 +60,13 @@ public class ClienteController {
 	}
 
 	@DeleteMapping("/{clienteId}")
-	public ResponseEntity<Void> remover (@PathVariable Long clienteId){
-		if(!clienteRepository.existsById(clienteId)) {
-			return ResponseEntity.notFound().build();	
+	public ResponseEntity<Void> remover(@PathVariable Long clienteId) {
+		if (!clienteRepository.existsById(clienteId)) {
+			return ResponseEntity.notFound().build();
 		}
-		
+
 		clienteService.excluir(clienteId);
 		return ResponseEntity.noContent().build();
-	}	
-	
+	}
+
 }

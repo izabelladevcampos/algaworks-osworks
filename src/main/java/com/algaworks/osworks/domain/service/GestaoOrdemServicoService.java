@@ -14,23 +14,22 @@ import com.algaworks.osworks.domain.repository.OrdemServicoRepository;
 
 @Service
 public class GestaoOrdemServicoService {
-	
+
 	@Autowired
 	private OrdemServicoRepository ordemServicoRepository;
-	
+
 	@Autowired
 	private ClienteRepository clienteRepository;
-	
-	public OrdemServico criar (OrdemServico ordemServico) {
+
+	public OrdemServico criar(OrdemServico ordemServico) {
 		Cliente cliente = clienteRepository.findById(ordemServico.getCliente().getId())
 				.orElseThrow(() -> new NegocioException("Cliente não encontrado!"));
-				
-		ordemServico.setCliente(cliente);		
+
+		ordemServico.setCliente(cliente);
 		ordemServico.setStatus(StatusOrdemServico.ABERTA);
 		ordemServico.setDataAbertura(OffsetDateTime.now());
-				
+
 		return ordemServicoRepository.save(ordemServico);
 	}
-	
 
 }

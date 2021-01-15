@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.algaworks.osworks.domain.model.OrdemServico;
 
 @Repository
-public interface OrdemServicoRepository extends JpaRepository <OrdemServico, Long> {
+public interface OrdemServicoRepository extends JpaRepository<OrdemServico, Long> {
 
 }
