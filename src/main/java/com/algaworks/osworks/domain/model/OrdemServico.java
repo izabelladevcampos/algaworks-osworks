@@ -1,7 +1,7 @@
 package com.algaworks.osworks.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +10,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
+
+import com.algaworks.osworks.domain.ValidationGroups;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 
 @Entity
 public class OrdemServico {
@@ -18,17 +28,27 @@ public class OrdemServico {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Valid
+	@ConvertGroup(from = Default.class, to = ValidationGroups.ClienteId.class)
 	@ManyToOne
+	@NotNull
 	private Cliente cliente;
 	
+	@NotBlank
 	private String descricao;
+	
+	@NotNull
 	private BigDecimal preco;
 	
+	@JsonProperty(access= Access.READ_ONLY)
 	@Enumerated(EnumType.STRING)
 	private StatusOrdemServico status;
 	
-	private LocalDateTime dataAbertura;
-	private LocalDateTime dataFinalizacao;
+	@JsonProperty(access= Access.READ_ONLY)
+	private OffsetDateTime dataAbertura;
+	
+	@JsonProperty(access= Access.READ_ONLY)
+	private OffsetDateTime dataFinalizacao;
 	
 	
 	public Long getId() {
@@ -61,16 +81,16 @@ public class OrdemServico {
 	public void setStatus(StatusOrdemServico status) {
 		this.status = status;
 	}
-	public LocalDateTime getDataAbertura() {
+	public OffsetDateTime getDataAbertura() {
 		return dataAbertura;
 	}
-	public void setDataAbertura(LocalDateTime dataAbertura) {
-		this.dataAbertura = dataAbertura;
+	public void setDataAbertura(OffsetDateTime localDateTime) {
+		this.dataAbertura = localDateTime;
 	}
-	public LocalDateTime getDataFinalizacao() {
+	public OffsetDateTime getDataFinalizacao() {
 		return dataFinalizacao;
 	}
-	public void setDataFinalizacao(LocalDateTime dataFinalizacao) {
+	public void setDataFinalizacao(OffsetDateTime dataFinalizacao) {
 		this.dataFinalizacao = dataFinalizacao;
 	}
 	@Override
